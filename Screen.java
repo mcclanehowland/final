@@ -26,7 +26,7 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
 		addMouseListener(this);
 		addKeyListener(this);
 		setFocusable(true);
-        currentLevel = new Level(5);
+        currentLevel = new Level(2000);
         main = new Character(0,300);
 	}
     public Dimension getPreferredSize() {
@@ -46,6 +46,7 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
             main.x = 0;
             main.y = 300;
         }
+        main.currentLevel = currentLevel;
         currentLevel.draw(gBuff);
         main.draw(gBuff);
 
@@ -85,8 +86,8 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
 	public void mousePressed(MouseEvent e) {
 		
 	}
-	public void keyPressed(KeyEvent evt) {
-        switch(evt.getKeyCode()) {
+	public void keyPressed(KeyEvent e) {
+        switch(e.getKeyCode()) {
             case 38: //up arrow
                 moveUp = true;
                 break;
@@ -98,6 +99,9 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
                 break;
             case 37:
                 moveLeft = true;
+                break;
+            case 80:
+                currentLevel = new Level(currentLevel.difficulty+50);
                 break;
         }
 

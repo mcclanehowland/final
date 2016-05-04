@@ -13,12 +13,12 @@ public class Level {
         path[0] = new int[]{0,350};
         int i = 1;
         int x = 0;
-        while(x < 800 && i < path.length) {
+        while(i < path.length) {
             if(Math.random() > 0.5) {
                 path[i] = new int[] {path[i-1][0]+50,path[i-1][1]};
             }
             else {
-                if(Math.random() > 0.5 && path[i-1][1] < 600) {
+                if(Math.random() > 0.5 && path[i-1][1] < 550) {
                     path[i] = new int[] {path[i-1][0],path[i-1][1]+50};
                 }
                 else if(path[i-1][1] > 0){
@@ -26,14 +26,17 @@ public class Level {
                 }
             }
             x = path[i][0];
+            if(x > 800) {
+                path[i][0] = path[i][0]%600+50;
+            }
             i++;
         }
         while(obstacles.size() < difficulty) {
             boolean toAdd = true;
-            int tempX = (int)(Math.random()*800);
+            int tempX = (int)(Math.random()*650+100);
             int tempY = (int)(Math.random()*600);
             for(int j = 0;j < path.length;j++) {
-                if(tempX > path[j][0] && tempX < path[j][0]+100 && tempY > path[j][1] && tempY < path[j][1]+100) {
+                if(tempX+50 > path[j][0] && tempX < path[j][0]+60 && tempY+50 > path[j][1] && tempY < path[j][1]+60) {
                     toAdd = false;
                     break;
                 }
