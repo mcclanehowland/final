@@ -15,19 +15,22 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 
-public class Screen extends JPanel implements ActionListener, MouseListener, KeyListener {
+public class Screen extends JPanel implements MouseListener, KeyListener {
 
 	private BufferedImage bufferedImage;
     private boolean moveUp,moveDown,moveRight,moveLeft;
     private Character main;
     Level currentLevel;
+
 	public Screen() {
-        setLayout(null);
+        //key and mouse listener things 
 		addMouseListener(this);
 		addKeyListener(this);
 		setFocusable(true);
+        //instantiate levels and character
         currentLevel = new Level(2000);
         main = new Character(0,300);
+        main.currentLevel = currentLevel;
 	}
     public Dimension getPreferredSize() {
         return new Dimension(800,600);
@@ -41,19 +44,26 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
 		gBuff.setColor(Color.WHITE);
 		gBuff.fillRect(0, 0, 800, 600);
 		
-        if(main.x > 800) {
-            currentLevel = new Level(currentLevel.difficulty+10);
-            main.x = 0;
-            main.y = 300;
+        if(main.x > 800) { //if the player reached the end of the screen, level up
+            levelUp();
         }
-        main.currentLevel = currentLevel;
         currentLevel.draw(gBuff);
         main.draw(gBuff);
 
 		gBuff.setColor(Color.green);
 		g.drawImage(bufferedImage, 0, 0, null);
 	}
+    public void levelUp() {
+        //update the current level
+        currentLevel = new Level(currentLevel.difficulty+10);
+        //reset the main character
+        main.x = 0;
+        main.y = 350;
+        //update the character's stored current level
+        main.currentLevel = currentLevel;
+    }
     public void animate() {
+        //sleep, then go through the movement logic
         while(true) {
             sleep(60);
             if(moveLeft) {
@@ -71,7 +81,6 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
             repaint();
         }
     }
-
 	public void sleep(int time) {
 		try {
 			Thread.sleep(time);
@@ -80,12 +89,7 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
 			Thread.currentThread().interrupt();
 		}
 	}
-    public void actionPerformed(ActionEvent e) {
-
-    }
-	public void mousePressed(MouseEvent e) {
-		
-	}
+    //movement booleans, and the cheat key
 	public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()) {
             case 38: //up arrow
@@ -101,7 +105,7 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
                 moveLeft = true;
                 break;
             case 80:
-                currentLevel = new Level(currentLevel.difficulty+50);
+                levelUp();
                 break;
         }
 
@@ -122,14 +126,11 @@ public class Screen extends JPanel implements ActionListener, MouseListener, Key
                 break;
         }       
     }
+	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e){}
-	
 	public void mouseEntered(MouseEvent e){}
-	
 	public void mouseExited(MouseEvent e){}
-	
 	public void mouseClicked(MouseEvent e){}
-	
 	public void keyTyped(KeyEvent evt){}
 }
 

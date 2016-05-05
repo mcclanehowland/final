@@ -1,22 +1,36 @@
+import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.Color;
 
 public class Character {
     int x,y,size;
     Level currentLevel;
+    BufferedImage obscure;
     public Character(int x, int y) {
         this.x = x;
         this.y = y;
         size = 50;
+        try {
+            obscure = ImageIO.read(new File("obscure.png"));
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void draw(Graphics g) {
-        g.setColor(Color.black);
+        g.setColor(Color.cyan);
         g.fillRect(x,y,size,size);
         g.setColor(Color.green);
         g.fillRect(x+10,y+10,30,30);
+        g.drawImage(obscure,x-900,y-800,null);
     }
     public void move(int dX,int dY) {
-        //check the collisions first
+        //check the collisions 
         boolean move = true;
         for(Obstacle each : currentLevel.obstacles) {
             if(x+dX+size > each.x && x+dX < each.x+each.size && y+dY+size > each.y && y+dY < each.y + each.size) {
