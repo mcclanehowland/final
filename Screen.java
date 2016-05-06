@@ -14,13 +14,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-
 public class Screen extends JPanel implements MouseListener, KeyListener {
 
 	private BufferedImage bufferedImage;
-    private boolean moveUp,moveDown,moveRight,moveLeft;
-    private Character main;
-    Level currentLevel;
+    private boolean moveUp,moveDown,moveRight,moveLeft; //movement booleans
+    private Character main; //main character
+    Level currentLevel; //level that is loaded on the screen
 
 	public Screen() {
         //key and mouse listener things 
@@ -28,7 +27,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 		addKeyListener(this);
 		setFocusable(true);
         //instantiate levels and character
-        currentLevel = new Level(2000);
+        currentLevel = new Level(100);
         main = new Character(0,300);
         main.currentLevel = currentLevel;
 	}
@@ -133,4 +132,3 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 	public void mouseClicked(MouseEvent e){}
 	public void keyTyped(KeyEvent evt){}
 }
-

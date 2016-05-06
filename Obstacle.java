@@ -13,4 +13,3 @@ public class Obstacle {
         g.fillRect(x,y,size,size);
     }
 }
-

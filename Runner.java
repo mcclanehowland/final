@@ -14,4 +14,3 @@ public class Runner
         s.animate();
 	}
 }
-
