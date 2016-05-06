@@ -27,7 +27,7 @@ public class Character {
         g.fillRect(x,y,size,size);
         g.setColor(Color.green);
         g.fillRect(x+10,y+10,30,30);
-        g.drawImage(obscure,x-900,y-800,null);
+        //g.drawImage(obscure,x-900,y-800,null);
     }
     public void move(int dX,int dY) {
         //check the collisions 
