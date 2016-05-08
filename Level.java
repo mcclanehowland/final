@@ -16,6 +16,7 @@ public class Level {
 
     //global variables
     int difficulty;
+    Flashlight flashlight;
     ArrayList<Obstacle> obstacles;
     int[][] path;
     public Level(int difficulty) {
@@ -38,26 +39,8 @@ public class Level {
             else {
                 path[i] = new int[] {path[i-1][0]+50,path[i-1][1]}; 
             }
-
-
-
-            /*if(Math.random() > 0.5) { 
-                //add the next path block in front of the previous
-                path[i] = new int[] {path[i-1][0]+50,path[i-1][1]}; 
-            }
-            else {
-                if(Math.random() > 0.5 && path[i-1][1] < 500) {
-                    //add the path block below the previous
-                    path[i] = new int[] {path[i-1][0],path[i-1][1]+50};
-                }
-                else if(path[i-1][1] > 0){
-                    //add the path block above the previous
-                    path[i] = new int[] {path[i-1][0],path[i-1][1]-50};
-                }
-            }
-            */
             x = path[i][0]; //update the position variable
-            if(x > 800) { //if the path hits the edge of the screen, come back to the beginning.
+            if(x > 750) { //if the path hits the edge of the screen, come back to the beginning.
                 path[i][0] = path[i][0]%800;
                 path[i][1] = (int)(Math.random()*500);
             }
@@ -78,6 +61,7 @@ public class Level {
                 obstacles.add(new Obstacle(tempX,tempY));
             }
         }
+        flashlight = new Flashlight(path[path.length/2][0],path[path.length/2][1]);
     }
     public void draw(Graphics g) {
         //draw the obstacles
@@ -89,6 +73,7 @@ public class Level {
         for(int i = 0;i < path.length;i++) {
             g.drawRect(path[i][0],path[i][1],50,50);
         }
+        flashlight.draw(g);
     }
 
 }

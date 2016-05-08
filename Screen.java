@@ -17,16 +17,11 @@ import java.util.ArrayList;
 public class Screen extends JPanel implements MouseListener, KeyListener {
 
 	private BufferedImage bufferedImage;
-<<<<<<< HEAD
     private boolean moveUp,moveDown,moveRight,moveLeft;
     private boolean mainMenu = true;
-    private Character main;
+    private MainCharacter main;
+    private Character otherCharacter;
     Level currentLevel;
-=======
-    private boolean moveUp,moveDown,moveRight,moveLeft; //movement booleans
-    private Character main; //main character
-    Level currentLevel; //level that is loaded on the screen
->>>>>>> 0eb401290be5d4854ec5b238aa27288c595ead59
 
 	public Screen() {
         //key and mouse listener things 
@@ -35,7 +30,8 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 		setFocusable(true);
         //instantiate levels and character
         currentLevel = new Level(100);
-        main = new Character(0,300);
+        main = new MainCharacter(0,300);
+        otherCharacter = new Character(0,100);
         main.currentLevel = currentLevel;
 	}
     public Dimension getPreferredSize() {
@@ -54,6 +50,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
             levelUp();
         }
         currentLevel.draw(gBuff);
+        otherCharacter.draw(gBuff);
         main.draw(gBuff);
 
 		gBuff.setColor(Color.green);
@@ -104,7 +101,6 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 	}
     //movement booleans, and the cheat key
 	public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
         switch(e.getKeyCode()) {
             case 32: 
                 mainMenu = false;

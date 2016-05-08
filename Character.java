@@ -15,19 +15,13 @@ public class Character {
         this.x = x;
         this.y = y;
         size = 50;
-        try {
-            obscure = ImageIO.read(new File("obscure.png"));
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        
     }
     public void draw(Graphics g) {
         g.setColor(Color.cyan);
         g.fillRect(x,y,size,size);
         g.setColor(Color.green);
         g.fillRect(x+10,y+10,30,30);
-        //g.drawImage(obscure,x-900,y-800,null);
     }
     public void move(int dX,int dY) {
         //check the collisions 
