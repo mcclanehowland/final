@@ -17,9 +17,11 @@ import java.util.ArrayList;
 public class Screen extends JPanel implements MouseListener, KeyListener {
 
 	private BufferedImage bufferedImage;
-    private boolean moveUp,moveDown,moveRight,moveLeft; //movement booleans
-    private Character main; //main character
-    Level currentLevel; //level that is loaded on the screen
+    private boolean moveUp,moveDown,moveRight,moveLeft;
+    private boolean mainMenu = true;
+    private MainCharacter main;
+    private Character otherCharacter;
+    Level currentLevel;
 
 	public Screen() {
         //key and mouse listener things 
@@ -28,7 +30,8 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 		setFocusable(true);
         //instantiate levels and character
         currentLevel = new Level(100);
-        main = new Character(0,300);
+        main = new MainCharacter(0,300);
+        otherCharacter = new Character(0,100);
         main.currentLevel = currentLevel;
 	}
     public Dimension getPreferredSize() {
@@ -47,9 +50,17 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
             levelUp();
         }
         currentLevel.draw(gBuff);
+        otherCharacter.draw(gBuff);
         main.draw(gBuff);
 
 		gBuff.setColor(Color.green);
+        if(mainMenu) {
+            gBuff.setColor(Color.gray);
+            gBuff.fillRect(0,0,800,600);
+            gBuff.setColor(Color.black);
+            gBuff.drawString("Cave Explorer",350,300);
+            gBuff.drawString("Press Space to Begin",350,350);
+        }
 		g.drawImage(bufferedImage, 0, 0, null);
 	}
     public void levelUp() {
@@ -91,6 +102,9 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
     //movement booleans, and the cheat key
 	public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()) {
+            case 32: 
+                mainMenu = false;
+                break;
             case 38: //up arrow
                 moveUp = true;
                 break;
@@ -107,6 +121,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                 levelUp();
                 break;
         }
+        repaint();
 
 	}
 	public void keyReleased(KeyEvent evt) { 
