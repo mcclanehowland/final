@@ -29,43 +29,45 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 		addKeyListener(this);
 		setFocusable(true);
         //instantiate levels and character
-        currentLevel = new Level(100);
         main = new MainCharacter(0,300);
-        otherCharacter = new Character(0,100);
+        currentLevel = new Level(main);
+        otherCharacter = new Miner(0,100);
         main.currentLevel = currentLevel;
 	}
     public Dimension getPreferredSize() {
-        return new Dimension(800,600);
+        return new Dimension(800,700);
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 		
-		if(bufferedImage==null) //useless
-        bufferedImage = (BufferedImage)(createImage(getWidth(),getHeight())); 
+		if(bufferedImage==null) 
+            bufferedImage = (BufferedImage)(createImage(getWidth(),getHeight())); 
 		Graphics gBuff = bufferedImage.createGraphics(); 
 		gBuff.setColor(Color.WHITE);
 		gBuff.fillRect(0, 0, 800, 600);
-		
         if(main.x > 800) { //if the player reached the end of the screen, level up
             levelUp();
         }
         currentLevel.draw(gBuff);
         otherCharacter.draw(gBuff);
+        //inventory box
+        
         main.draw(gBuff);
 
 		gBuff.setColor(Color.green);
-        if(mainMenu) {
+        if(mainMenu) { //draw the start screen
             gBuff.setColor(Color.gray);
             gBuff.fillRect(0,0,800,600);
             gBuff.setColor(Color.black);
             gBuff.drawString("Cave Explorer",350,300);
             gBuff.drawString("Press Space to Begin",350,350);
         }
+        
 		g.drawImage(bufferedImage, 0, 0, null);
 	}
     public void levelUp() {
         //update the current level
-        currentLevel = new Level(currentLevel.difficulty+10);
+        currentLevel = new Level(main);
         //reset the main character
         main.x = 0;
         main.y = 350;
@@ -75,18 +77,20 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
     public void animate() {
         //sleep, then go through the movement logic
         while(true) {
-            sleep(60);
-            if(moveLeft) {
-                main.move(-10,0);
-            }
-            else if(moveRight) {
-                main.move(10,0);
-            }
-            if(moveUp) {
-                main.move(0,-10);
-            }
-            else if(moveDown) {
-                main.move(0,10);
+            sleep(30);
+            if(!mainMenu) {
+                if(moveLeft) {
+                    main.move(-10,0);
+                }
+                else if(moveRight) {
+                    main.move(10,0);
+                }
+                if(moveUp) {
+                    main.move(0,-10);
+                }
+                else if(moveDown) {
+                    main.move(0,10);
+                }
             }
             repaint();
         }

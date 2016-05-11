@@ -15,17 +15,21 @@ public class Level {
     final int obstacleNum = 400;
 
     //global variables
-    int difficulty;
-    Flashlight flashlight;
+    static int level;
+    private MainCharacter main;
     ArrayList<Obstacle> obstacles;
+    ArrayList<Item> items;
     int[][] path;
-    public Level(int difficulty) {
-        this.difficulty = difficulty;
+    public Level(MainCharacter c) {
+        level++;
+        main = c;
         obstacles = new ArrayList<Obstacle>();
+        items = new ArrayList<Item>();
         path = new int[100][2];
         path[0] = new int[]{0,350}; //first path position
         int i = 1; //index variable
         int x = 0; //x position variable
+        boolean added = false;
         while(i < path.length) { 
             //if statements are only for randomness.
             /** I need to simplify this */
@@ -33,7 +37,7 @@ public class Level {
             if(random > 0.6 && path[i-1][1] > 50) {
                 path[i] = new int[] {path[i-1][0],path[i-1][1]-50};
             }
-            else if(random > 0.3 && path[i-1][1] < 550) {
+            else if(random > 0.3 && path[i-1][1] < 500) {
                 path[i] = new int[] {path[i-1][0],path[i-1][1]+50};
             }
             else {
@@ -43,6 +47,10 @@ public class Level {
             if(x > 750) { //if the path hits the edge of the screen, come back to the beginning.
                 path[i][0] = path[i][0]%800;
                 path[i][1] = (int)(Math.random()*500);
+            }
+            if(level == 1 && !added && path[i][0] > 500) {
+                items.add(new Flashlight(path[i][0],path[i][1]));
+                added = true;
             }
             i++; //increment the index variable
         }
@@ -61,7 +69,17 @@ public class Level {
                 obstacles.add(new Obstacle(tempX,tempY));
             }
         }
-        flashlight = new Flashlight(path[path.length/2][0],path[path.length/2][1]);
+    }
+    public boolean levelCondition() {
+        if(level == 1) {
+            for(Item each : items) {
+                if(each.getType().equals("flashlight")) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
     public void draw(Graphics g) {
         //draw the obstacles
@@ -73,7 +91,15 @@ public class Level {
         for(int i = 0;i < path.length;i++) {
             g.drawRect(path[i][0],path[i][1],50,50);
         }
-        flashlight.draw(g);
+        for(int i = 0;i < items.size();i++) {
+            if(main.x+main.size > items.get(i).x && main.x < items.get(i).x+items.get(i).size && main.y+main.size > items.get(i).y && main.y < items.get(i).y+items.get(i).size) {
+                main.addItem(items.remove(i));
+                i--;
+            }
+        }
+        for(Item each : items) {
+            each.draw(g);
+        }
     }
 
 }

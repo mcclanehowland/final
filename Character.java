@@ -31,7 +31,7 @@ public class Character {
                 move = false;
             }
         }
-        if(move && x >= 0 && y+dY+size <= 600 && y >= 0) {
+        if(move && x >= 0 && y+dY+size < 600 && y >= 0 && (x <= 750 || currentLevel.levelCondition())) {
             x += dX;
             y += dY;
         }
@@ -41,8 +41,11 @@ public class Character {
         if(y <= 0) {
             y = 0;
         }
-        if(y >= 600) {
-            y = 600;
+        if(y >= 500) {
+            y = 500;
+        }
+        if(x >= 750 && !currentLevel.levelCondition()) {
+            x = 750;
         }
     }
 }

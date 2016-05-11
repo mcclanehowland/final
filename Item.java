@@ -1,22 +1,19 @@
 import java.awt.Graphics;
 
 public abstract class Item {
-    private int x,y;
+    int x,y,size;
     private String type;
-    public Item(int x,int y,String type) {
+    boolean obtained;
+    public Item(int x,int y,int size,String type) {
         this.x = x;
         this.y = y;
+        this.size = size;
         this.type = type;
     }
     public String getType() {
         return type;
     }
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
-    }
     public abstract void draw(Graphics g);
+    public abstract void draw(Graphics g,int x,int y);
 }
 
