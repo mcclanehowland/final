@@ -27,6 +27,7 @@ public class MainCharacter extends Character {
         if(!flashlight && currentLevel.level == 1) {
             g.drawImage(obscure,super.x-900,super.y-800,null);
         }
+        //inventory box
         g.setColor(Color.white);
         g.fillRect(0,550,800,50);
         g.setColor(Color.red);

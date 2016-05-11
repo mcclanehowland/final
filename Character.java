@@ -11,6 +11,7 @@ public class Character {
     int x,y,size;
     Level currentLevel;
     BufferedImage obscure;
+    boolean talking;
     public Character(int x, int y) {
         this.x = x;
         this.y = y;
@@ -22,6 +23,12 @@ public class Character {
         g.fillRect(x,y,size,size);
         g.setColor(Color.green);
         g.fillRect(x+10,y+10,30,30);
+    }
+    public void talk(Graphics g) {
+        g.setColor(Color.white);
+        g.fill3DRect(x+size/2,y-50,200,50,true);
+        g.setColor(Color.red);
+        g.drawRoundRect(x+size/2,y-50,200,50,20,20);
     }
     public void move(int dX,int dY) {
         //check the collisions 

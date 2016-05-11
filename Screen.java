@@ -21,6 +21,9 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
     private boolean mainMenu = true;
     private MainCharacter main;
     private Character otherCharacter;
+    private int level = 1;
+    private boolean levelOver = false;
+    ArrayList<Character> characters;
     Level currentLevel;
 
 	public Screen() {
@@ -31,8 +34,9 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         //instantiate levels and character
         main = new MainCharacter(0,300);
         currentLevel = new Level(main);
-        otherCharacter = new Miner(0,100);
         main.currentLevel = currentLevel;
+        characters = new ArrayList<Character>();
+        characters.add(new Miner(0,100));
 	}
     public Dimension getPreferredSize() {
         return new Dimension(800,700);
@@ -45,16 +49,22 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 		Graphics gBuff = bufferedImage.createGraphics(); 
 		gBuff.setColor(Color.WHITE);
 		gBuff.fillRect(0, 0, 800, 600);
-        if(main.x > 800) { //if the player reached the end of the screen, level up
-            levelUp();
-        }
-        currentLevel.draw(gBuff);
-        otherCharacter.draw(gBuff);
-        //inventory box
         
+        //draw the current level
+        currentLevel.draw(gBuff);
+        
+        //draw the characters & check if they should be talking to the character
+        for(Character each : characters) {
+            each.draw(gBuff);
+            if(each.x+each.size >= main.x && each.x <= main.x+main.size && each.y <= main.y+main.size && each.y+each.size >= main.y) {
+                each.talking = true;
+            }
+            else {
+                each.talking = false;
+            }
+        }
         main.draw(gBuff);
 
-		gBuff.setColor(Color.green);
         if(mainMenu) { //draw the start screen
             gBuff.setColor(Color.gray);
             gBuff.fillRect(0,0,800,600);
@@ -62,12 +72,29 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
             gBuff.drawString("Cave Explorer",350,300);
             gBuff.drawString("Press Space to Begin",350,350);
         }
+        if(main.x > 800) { //if the player reached the end of the screen, level up
+            levelUp();
+        }
+        if(levelOver) { //the level cutscenes
+            gBuff.setColor(Color.gray);
+            gBuff.fillRect(0,0,800,600);
+            gBuff.setColor(Color.black);
+            gBuff.drawString("Cave Explorer: Level "+level,350,300);
+            gBuff.drawString("Press Space to Continue",350,350);
+        }
         
 		g.drawImage(bufferedImage, 0, 0, null);
 	}
     public void levelUp() {
         //update the current level
+        level++;
+        levelOver = true;
         currentLevel = new Level(main);
+        //get rid of all the other characters and add new characters
+        characters.clear();
+        if(level >= 2) {
+            characters.add(new Monster(currentLevel.path[currentLevel.path.length/2][0],currentLevel.path[currentLevel.path.length/2][1]));
+        }
         //reset the main character
         main.x = 0;
         main.y = 350;
@@ -76,9 +103,11 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
     }
     public void animate() {
         //sleep, then go through the movement logic
+        int counter = 0;
         while(true) {
-            sleep(30);
-            if(!mainMenu) {
+            counter++;
+            sleep(50);
+            if(!mainMenu && !levelOver) { //don't move if it is in a cutscene or the game hasn't started
                 if(moveLeft) {
                     main.move(-10,0);
                 }
@@ -91,6 +120,19 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                 else if(moveDown) {
                     main.move(0,10);
                 }
+                if(counter % 20 == 0) { //move the monsters and characters
+                    for(Character each : characters) {
+                        each.currentLevel = currentLevel;
+                        int dx = (int)(Math.random()*5+5);
+                        int dy = (int)(Math.random()*5+5);
+                        if(Math.random() > 0.5) 
+                            dx *=  -1;
+                        if(Math.random() > 0.5) 
+                            dy *= -1;
+                        each.move(dx,dy);
+                    }
+                }
+
             }
             repaint();
         }
@@ -105,8 +147,15 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 	}
     //movement booleans, and the cheat key
 	public void keyPressed(KeyEvent e) {
+        //System.out.println(e.getKeyCode());
         switch(e.getKeyCode()) {
             case 32: 
+                if(mainMenu) {
+                    levelOver = true;
+                }
+                else {
+                    levelOver = false;
+                }
                 mainMenu = false;
                 break;
             case 38: //up arrow
@@ -122,7 +171,9 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                 moveLeft = true;
                 break;
             case 80:
-                levelUp();
+                if(!levelOver) {
+                    levelUp();
+                }
                 break;
         }
         repaint();
