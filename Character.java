@@ -10,7 +10,7 @@ import java.awt.Color;
 public class Character {
     int x,y,size;
     Level currentLevel;
-    BufferedImage obscure;
+    BufferedImage image;
     boolean talking;
     public Character(int x, int y) {
         this.x = x;
@@ -26,6 +26,15 @@ public class Character {
         if(talking) {
             talk(g);
         }
+    }
+    public void drawImage(Graphics g, String imageName) {
+        try {
+            image = ImageIO.read(new File(imageName));
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        g.drawImage(image,x,y,null);
     }
     public void talk(Graphics g) {
         g.setColor(Color.white);
