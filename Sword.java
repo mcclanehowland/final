@@ -3,14 +3,14 @@ import java.awt.Color;
 
 public class Sword extends Item {
     public Sword(int x,int y) {
-        super(x,y,50,"sword");
+        super(x,y,50,"sword","sword.png");
     }
     public void draw(Graphics g) {
-        g.setColor(Color.red);
-        g.fillOval(x,y,size,size);
+        drawImage(g);
     }
     public void draw(Graphics g,int x,int y) {
-        g.setColor(Color.red);
-        g.fillOval(x,y,size,size);
+        this.x = x;
+        this.y = y;
+        drawImage(g);
     }
 }

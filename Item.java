@@ -9,22 +9,22 @@ public abstract class Item {
     private String type;
     boolean obtained;
     private BufferedImage image;
-    public Item(int x,int y,int size,String type) {
+    public Item(int x,int y,int size,String type,String imageName) {
         this.x = x;
         this.y = y;
         this.size = size;
         this.type = type;
-    }
-    public String getType() {
-        return type;
-    }
-    public void drawImage(Graphics g, String imageName) {
         try {
             image = ImageIO.read(new File(imageName));
         } 
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public String getType() {
+        return type;
+    }
+    public void drawImage(Graphics g) {
         g.drawImage(image,x,y,null);
     }
     public abstract void draw(Graphics g);

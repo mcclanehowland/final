@@ -13,7 +13,7 @@ public class MainCharacter extends Character {
     private ArrayList<Item> inventory;
     private boolean flashlight;
     public MainCharacter(int x,int y) {
-        super(x,y);
+        super(x,y,"");
         try {
             obscure = ImageIO.read(new File("obscure.png"));
         } 
@@ -33,7 +33,7 @@ public class MainCharacter extends Character {
         g.setColor(Color.red);
         g.drawRoundRect(0,550,800,50,50,50);
         int x = 50;
-        int y = 550;
+        int y = 555;
         for(Item each : inventory) {
             each.draw(g,x,y);
             x += 60;

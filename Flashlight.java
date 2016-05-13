@@ -7,16 +7,14 @@ import javax.imageio.ImageIO;
 
 public class Flashlight extends Item {
     public Flashlight(int x,int y) {
-        super(x,y,50,"flashlight");
+        super(x,y,50,"flashlight","Flashlight.png");
     }
     public void draw(Graphics g) {
-        g.setColor(Color.yellow);
-        g.fillOval(x,y,size,size);
-        super.drawImage(g,"flashlight.jpg");
+        drawImage(g);
     }
     public void draw(Graphics g,int x,int y) {
         this.x = x;
         this.y = y;
-        super.drawImage(g,"flashlight.jpg");
+        drawImage(g);
     }
 }

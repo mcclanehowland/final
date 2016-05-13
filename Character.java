@@ -6,17 +6,20 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 
 public class Character {
     int x,y,size;
+    String text;
     Level currentLevel;
     BufferedImage image;
     boolean talking;
-    public Character(int x, int y) {
+    public Character(int x, int y,String text) {
         this.x = x;
         this.y = y;
+        this.text = text;
         size = 50;
-        
     }
     public void draw(Graphics g) {
         g.setColor(Color.cyan);
@@ -36,12 +39,31 @@ public class Character {
         }
         g.drawImage(image,x,y,null);
     }
+    public void drawText(String text, Font font, Graphics g, int width, int startX, int startY)
+    {
+        String[] words = text.split(" ");//String method that splits a String phrase into words, since " " is passed in
+        int i = 0;//Count integer
+        while (i < words.length)
+        {
+            String currentLine = words[i++];//String that holds the characters that will be printed on the current line
+            while (( i < words.length ) && (g.getFontMetrics(font).stringWidth(currentLine + " " + words[i]) < width))//While loop that runs while the pixel width of the string is less than the width passed in
+            {
+            currentLine = currentLine + " " + words[i];//Adds as many words as fit onto the line
+            i++;
+            }
+            g.drawString(currentLine, startX, startY);//Draws the line
+            int lineHeight = g.getFontMetrics(font).getHeight();//Gets the height of a standard line of text in the passed in font
+            startY = startY + lineHeight;//Increases the y variable to draw on the next line
+        }
+    }
     public void talk(Graphics g) {
         g.setColor(Color.white);
         g.fill3DRect(x+size/2,y-50,200,50,true);
         g.setColor(Color.red);
         g.drawRoundRect(x+size/2,y-50,200,50,20,20);
         g.setColor(Color.black);
+        Font z = new Font("ZapfDingbats", Font.PLAIN,18);            
+        drawText(text,z,g,300,x+size/2+10,y-30);
     }
     public void move(int dX,int dY) {
         //check the collisions 

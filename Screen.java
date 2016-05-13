@@ -36,7 +36,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         currentLevel = new Level(main);
         main.currentLevel = currentLevel;
         characters = new ArrayList<Character>();
-        characters.add(new Miner(0,100));
+        characters.add(new Miner(0,100,"Search the cave to find the flashlight"));
 	}
     public Dimension getPreferredSize() {
         return new Dimension(800,700);
@@ -47,7 +47,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 		if(bufferedImage==null) 
             bufferedImage = (BufferedImage)(createImage(getWidth(),getHeight())); 
 		Graphics gBuff = bufferedImage.createGraphics(); 
-		gBuff.setColor(Color.WHITE);
+		gBuff.setColor(Color.pink);
 		gBuff.fillRect(0, 0, 800, 600);
         
         //draw the current level
@@ -96,7 +96,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         if(level >= 2) {
             for(int r = 0;r < currentLevel.path.length;r++) {
                 if(currentLevel.path[r][0] >= 500) {
-                    characters.add(new Monster(currentLevel.path[r][0],currentLevel.path[r][1]));
+                    characters.add(new Monster(currentLevel.path[r][0],currentLevel.path[r][1],"I'm a monster, kill me"));
                     break;
                 }
             }
