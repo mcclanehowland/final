@@ -92,8 +92,14 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         currentLevel = new Level(main);
         //get rid of all the other characters and add new characters
         characters.clear();
+        //level character code
         if(level >= 2) {
-            characters.add(new Monster(currentLevel.path[currentLevel.path.length/2][0],currentLevel.path[currentLevel.path.length/2][1]));
+            for(int r = 0;r < currentLevel.path.length;r++) {
+                if(currentLevel.path[r][0] >= 500) {
+                    characters.add(new Monster(currentLevel.path[r][0],currentLevel.path[r][1]));
+                    break;
+                }
+            }
         }
         //reset the main character
         main.x = 0;

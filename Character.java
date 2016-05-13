@@ -23,12 +23,16 @@ public class Character {
         g.fillRect(x,y,size,size);
         g.setColor(Color.green);
         g.fillRect(x+10,y+10,30,30);
+        if(talking) {
+            talk(g);
+        }
     }
     public void talk(Graphics g) {
         g.setColor(Color.white);
         g.fill3DRect(x+size/2,y-50,200,50,true);
         g.setColor(Color.red);
         g.drawRoundRect(x+size/2,y-50,200,50,20,20);
+        g.setColor(Color.black);
     }
     public void move(int dX,int dY) {
         //check the collisions 

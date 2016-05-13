@@ -6,13 +6,11 @@ public class Miner extends Character {
         super(x,y);
     }
     public void draw(Graphics g) {
+        super.draw(g);
         g.setColor(Color.blue);
         g.fillRect(x,y,size,size);
         g.setColor(Color.green);
         g.fillRect(x+size/10,y+size/10,4*size/5,4*size/5);
-        if(talking) {
-            talk(g);
-        }
     }
     public void talk(Graphics g) {
         super.talk(g);

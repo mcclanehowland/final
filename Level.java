@@ -11,6 +11,7 @@ public class Level {
         the obstacles can fill randomly without interfering with the players 
         ability to get across the screen.
     */
+
     /* constants */
     final int obstacleNum = 400;
 
@@ -31,9 +32,8 @@ public class Level {
         int x = 0; //x position variable
         boolean added = false;
         while(i < path.length) { 
-            //if statements are only for randomness.
-            /** I need to simplify this */
-            double random = Math.random();
+            //if statements for randomness
+            double random = Math.random(); //make it so there is always an option
             if(random > 0.6 && path[i-1][1] > 50) {
                 path[i] = new int[] {path[i-1][0],path[i-1][1]-50};
             }
@@ -43,13 +43,18 @@ public class Level {
             else {
                 path[i] = new int[] {path[i-1][0]+50,path[i-1][1]}; 
             }
-            x = path[i][0]; //update the position variable
+            x = path[i][0]; //update the position variable that will determine whether the path repeats from the beginning
             if(x > 750) { //if the path hits the edge of the screen, come back to the beginning.
                 path[i][0] = path[i][0]%800;
                 path[i][1] = (int)(Math.random()*500);
             }
-            if(level == 1 && !added && path[i][0] > 500) {
+            // add the flashlight around x = 500
+            if(level == 1 && !added && path[i][0] > 500) { 
                 items.add(new Flashlight(path[i][0],path[i][1]));
+                added = true;
+            }
+            if(level == 2 && !added && path[i][0] > 500) { 
+                items.add(new Sword(path[i][0],path[i][1]));
                 added = true;
             }
             i++; //increment the index variable
@@ -60,19 +65,23 @@ public class Level {
             int tempX = (int)(Math.random()*750+50);
             int tempY = (int)(Math.random()*600);
             for(int j = 0;j < path.length;j++) {
+                // is the obstacle where the path is?
                 if(tempX+50 > path[j][0] && tempX < path[j][0]+50 && tempY+50 > path[j][1] && tempY < path[j][1]+60) {
                     toAdd = false;
                     break;
                 }
             }
+            //add it if the obstacle is not in the way of the path
             if(toAdd) {
                 obstacles.add(new Obstacle(tempX,tempY));
             }
         }
     }
+    // returns boolean determining whether the level is done or not
     public boolean levelCondition() {
         if(level == 1) {
             for(Item each : items) {
+                //for level 1 the player must collect the flashlight. If the flashlight is in the items list the player does not have it
                 if(each.getType().equals("flashlight")) {
                     return false;
                 }
