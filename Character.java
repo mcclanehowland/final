@@ -17,13 +17,20 @@ public class Character {
     String text;
     Level currentLevel;
     BufferedImage image;
+     
     boolean talking;
-    public Character(int x, int y,String text,String type) {
+    public Character(int x, int y,String text,String type,String imageName) {
         this.x = x;
         this.y = y;
         this.text = text;
         this.type = type;
         size = 50;
+        try {
+            image = ImageIO.read(new File(imageName));
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public String getType() {
         return type;
@@ -35,24 +42,10 @@ public class Character {
         g.setColor(Color.green);
         if(health > 0)
             g.fillRect(x,y-10,health/2,5);
-
-        g.setColor(Color.cyan);
-        g.fillRect(x,y,size,size);
-        g.setColor(Color.green);
-        g.fillRect(x+10,y+10,30,30);
-
+        g.drawImage(image,x,y,null);
         if(talking) {
             talk(g);
         }
-    }
-    public void drawImage(Graphics g, String imageName) {
-        try {
-            image = ImageIO.read(new File(imageName));
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        g.drawImage(image,x,y,null);
     }
     public void attack(Character target) {
         target.health -= 2;

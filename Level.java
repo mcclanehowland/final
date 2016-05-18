@@ -115,10 +115,10 @@ public class Level {
             each.draw(g);
         }
         //draw the path outline for testing
-        g.setColor(Color.blue);
+        /*g.setColor(Color.blue);
         for(int i = 0;i < path.length;i++) {
             g.drawRect(path[i][0],path[i][1],50,50);
-        }
+        }*/
         for(int i = 0;i < items.size();i++) {
             if(main.x+main.size > items.get(i).x && main.x < items.get(i).x+items.get(i).size && main.y+main.size > items.get(i).y && main.y < items.get(i).y+items.get(i).size) {
                 main.addItem(items.remove(i));

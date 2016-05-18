@@ -14,7 +14,7 @@ public class MainCharacter extends Character {
     boolean flashlight;
     boolean sword;
     public MainCharacter(int x,int y) {
-        super(x,y,"","main");
+        super(x,y,"","main","maincharacter.png");
         try {
             obscure = ImageIO.read(new File("obscure.png"));
         } 
