@@ -10,10 +10,11 @@ import java.util.ArrayList;
 
 public class MainCharacter extends Character {
     private BufferedImage obscure;
-    private ArrayList<Item> inventory;
-    private boolean flashlight;
+    ArrayList<Item> inventory;
+    boolean flashlight;
+    boolean sword;
     public MainCharacter(int x,int y) {
-        super(x,y,"");
+        super(x,y,"","main");
         try {
             obscure = ImageIO.read(new File("obscure.png"));
         } 
@@ -36,6 +37,13 @@ public class MainCharacter extends Character {
         int y = 555;
         for(Item each : inventory) {
             each.draw(g,x,y);
+            if(currentLevel.level >= 2 && each.getType().equals("sword")) {
+                each.draw(g,super.x+25,super.y);
+                if(each.getType() == "sword") {
+                    sword = true;
+                }
+            }
+                
             x += 60;
         }
 

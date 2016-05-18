@@ -2,8 +2,8 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public class Monster extends Character {
-    public Monster(int x,int y,String text) {
-        super(x,y,text);
+    public Monster(int x,int y,String text,String type) {
+        super(x,y,text,type);
     }
     public void draw(Graphics g) {
         super.draw(g);
@@ -13,8 +13,4 @@ public class Monster extends Character {
             talk(g);
         }
     }
-    public void talk(Graphics g) {
-        super.talk(g);
-    }
-
 }

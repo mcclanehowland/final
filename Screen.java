@@ -20,7 +20,6 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
     private boolean moveUp,moveDown,moveRight,moveLeft;
     private boolean mainMenu = true;
     private MainCharacter main;
-    private Character otherCharacter;
     private int level = 1;
     private boolean levelOver = false;
     ArrayList<Character> characters;
@@ -37,6 +36,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         main.currentLevel = currentLevel;
         characters = new ArrayList<Character>();
         characters.add(new Miner(0,100,"Search the cave to find the flashlight"));
+        currentLevel.characters = characters;
 	}
     public Dimension getPreferredSize() {
         return new Dimension(800,700);
@@ -52,12 +52,24 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         
         //draw the current level
         currentLevel.draw(gBuff);
-        
+        currentLevel.characters = characters;
+        for(Character each : characters) {
+            each.currentLevel = currentLevel;
+        } 
         //draw the characters & check if they should be talking to the character
+        for(int i = 0;i < characters.size();i++) {
+            if(characters.get(i).health <= 0) {
+                characters.remove(i);
+                i--;
+            }
+        }
         for(Character each : characters) {
             each.draw(gBuff);
-            if(each.x+each.size >= main.x && each.x <= main.x+main.size && each.y <= main.y+main.size && each.y+each.size >= main.y) {
+            if(each.x+each.size+10 >= main.x && each.x-10 <= main.x+main.size && each.y-10 <= main.y+main.size && each.y+each.size+10 >= main.y) {
                 each.talking = true;
+                if(main.attacking && main.sword) {
+                    main.attack(each);
+                }
             }
             else {
                 each.talking = false;
@@ -82,7 +94,10 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
             gBuff.drawString("Cave Explorer: Level "+level,350,300);
             gBuff.drawString("Press Space to Continue",350,350);
         }
-        
+        if(!mainMenu) {
+            gBuff.setColor(Color.red);
+            gBuff.drawString("Level: "+level,730,20);
+        }
 		g.drawImage(bufferedImage, 0, 0, null);
 	}
     public void levelUp() {
@@ -93,11 +108,35 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         //get rid of all the other characters and add new characters
         characters.clear();
         //level character code
-        if(level >= 2) {
+        if(level == 2) {
+            characters.add(new Miner(0,200,"You must find the sword and kill all monsters. Hold space to attack"));
+            if(!main.flashlight) {
+                main.inventory.add(new Flashlight(0,0));
+                main.flashlight = true;
+            }
             for(int r = 0;r < currentLevel.path.length;r++) {
                 if(currentLevel.path[r][0] >= 500) {
-                    characters.add(new Monster(currentLevel.path[r][0],currentLevel.path[r][1],"I'm a monster, kill me"));
+                    characters.add(new Monster(currentLevel.path[r][0],currentLevel.path[r][1],"I'm a monster, kill me","monster"));
                     break;
+                }
+            }
+            currentLevel.characters = characters;
+        }
+        if(level == 3) {
+            characters.add(new Miner(0,200,"Kill all monsters and find the scroll. Hold space to attack")); 
+            if(!main.sword) {
+                main.inventory.add(new Sword(0,0));
+                main.sword = true;
+            }
+            int monsterNum = 0;
+            for(int r = 0;r < currentLevel.path.length;r++) {
+                if(currentLevel.path[r][0] >= 400) {
+                    monsterNum++;
+                    characters.add(new Monster(currentLevel.path[r][0],currentLevel.path[r][1],"I'm a monster, kill me","monster"));
+                    r += 10;
+                    if(monsterNum > level*3) {
+                        break;
+                    }
                 }
             }
         }
@@ -159,8 +198,11 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                 if(mainMenu) {
                     levelOver = true;
                 }
-                else {
+                else if(levelOver) {
                     levelOver = false;
+                }
+                else {
+                    main.attacking = true;
                 }
                 mainMenu = false;
                 break;
@@ -187,6 +229,9 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 	}
 	public void keyReleased(KeyEvent evt) { 
          switch(evt.getKeyCode()) {
+            case 32:
+                main.attacking = false;
+                break;
             case 38: //up arrow
                 moveUp = false;
                 break;

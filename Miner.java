@@ -3,7 +3,7 @@ import java.awt.Color;
 public class Miner extends Character {
     int size = 50;
     public Miner(int x,int y,String text) {
-        super(x,y,text);
+        super(x,y,text,"miner");
     }
     public void draw(Graphics g) {
         super.draw(g);

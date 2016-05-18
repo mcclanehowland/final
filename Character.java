@@ -11,21 +11,36 @@ import java.awt.FontMetrics;
 
 public class Character {
     int x,y,size;
+    int health = 100;
+    private String type;
+    boolean attacking;
     String text;
     Level currentLevel;
     BufferedImage image;
     boolean talking;
-    public Character(int x, int y,String text) {
+    public Character(int x, int y,String text,String type) {
         this.x = x;
         this.y = y;
         this.text = text;
+        this.type = type;
         size = 50;
     }
+    public String getType() {
+        return type;
+    }
     public void draw(Graphics g) {
+        //health bar
+        g.setColor(Color.red);
+        g.fillRect(x,y-10,50,5);
+        g.setColor(Color.green);
+        if(health > 0)
+            g.fillRect(x,y-10,health/2,5);
+
         g.setColor(Color.cyan);
         g.fillRect(x,y,size,size);
         g.setColor(Color.green);
         g.fillRect(x+10,y+10,30,30);
+
         if(talking) {
             talk(g);
         }
@@ -38,6 +53,9 @@ public class Character {
             e.printStackTrace();
         }
         g.drawImage(image,x,y,null);
+    }
+    public void attack(Character target) {
+        target.health -= 2;
     }
     public void drawText(String text, Font font, Graphics g, int width, int startX, int startY)
     {
@@ -58,12 +76,12 @@ public class Character {
     }
     public void talk(Graphics g) {
         g.setColor(Color.white);
-        g.fill3DRect(x+size/2,y-50,200,50,true);
+        g.fill3DRect(x+size/2,y-60,200,50,true);
         g.setColor(Color.red);
-        g.drawRoundRect(x+size/2,y-50,200,50,20,20);
+        g.drawRoundRect(x+size/2,y-60,200,50,20,20);
         g.setColor(Color.black);
         Font z = new Font("ZapfDingbats", Font.PLAIN,18);            
-        drawText(text,z,g,300,x+size/2+10,y-30);
+        drawText(text,z,g,300,x+size/2+10,y-40);
     }
     public void move(int dX,int dY) {
         //check the collisions 

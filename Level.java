@@ -20,6 +20,7 @@ public class Level {
     private MainCharacter main;
     ArrayList<Obstacle> obstacles;
     ArrayList<Item> items;
+    ArrayList<Character> characters;
     int[][] path;
     public Level(MainCharacter c) {
         level++;
@@ -53,8 +54,12 @@ public class Level {
                 items.add(new Flashlight(path[i][0],path[i][1]));
                 added = true;
             }
-            if(level == 2 && !added && path[i][0] > 500) { 
+            if(level == 2 && !added && path[i][0] > 300) { 
                 items.add(new Sword(path[i][0],path[i][1]));
+                added = true;
+            }
+            if(level == 3 && !added && path[i][0] > 600) { 
+                items.add(new Scroll(path[i][0],path[i][1]));
                 added = true;
             }
             i++; //increment the index variable
@@ -88,6 +93,20 @@ public class Level {
             }
             return true;
         }
+        if(level >= 2) {
+                for(Character each : characters) {
+                    if(each.getType().equals("monster")) {
+                        return false;
+                    }
+                }
+                for(Item each : main.inventory) {
+                    if(each.getType().equals("scroll")) {
+                        return true;
+                    }
+                }
+            return true;
+        }
+
         return false;
     }
     public void draw(Graphics g) {
