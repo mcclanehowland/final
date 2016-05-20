@@ -48,7 +48,7 @@ public class Character {
         }
     }
     public void attack(Character target) {
-        target.health -= 2;
+        target.health -= 4;
     }
     public void drawText(String text, Font font, Graphics g, int width, int startX, int startY)
     {

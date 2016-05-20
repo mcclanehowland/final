@@ -13,10 +13,16 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 
 public class Screen extends JPanel implements MouseListener, KeyListener {
 
 	private BufferedImage bufferedImage;
+    private BufferedImage background;
     private boolean moveUp,moveDown,moveRight,moveLeft;
     private boolean mainMenu = true;
     private MainCharacter main;
@@ -27,6 +33,12 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 
 	public Screen() {
         //key and mouse listener things 
+        try {
+            background = ImageIO.read(new File("background.png"));
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 		addMouseListener(this);
 		addKeyListener(this);
 		setFocusable(true);
@@ -39,7 +51,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         currentLevel.characters = characters;
 	}
     public Dimension getPreferredSize() {
-        return new Dimension(800,700);
+        return new Dimension(800,600);
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -47,8 +59,9 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
 		if(bufferedImage==null) 
             bufferedImage = (BufferedImage)(createImage(getWidth(),getHeight())); 
 		Graphics gBuff = bufferedImage.createGraphics(); 
-		gBuff.setColor(Color.pink);
-		gBuff.fillRect(0, 0, 800, 600);
+        
+        //draw the background image
+        gBuff.drawImage(background,0,0,null);
         
         //draw the current level
         currentLevel.draw(gBuff);
@@ -151,21 +164,21 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         int counter = 0;
         while(true) {
             counter++;
-            sleep(50);
+            sleep(70);
             if(!mainMenu && !levelOver) { //don't move if it is in a cutscene or the game hasn't started
                 if(moveLeft) {
-                    main.move(-10,0);
+                    main.move(-7,0);
                 }
                 else if(moveRight) {
-                    main.move(10,0);
+                    main.move(7,0);
                 }
                 if(moveUp) {
-                    main.move(0,-10);
+                    main.move(0,-7);
                 }
                 else if(moveDown) {
-                    main.move(0,10);
+                    main.move(0,7);
                 }
-                if(counter % 20 == 0) { //move the monsters and characters
+                if(counter % 10 == 0) { //move the monsters and characters
                     for(Character each : characters) {
                         each.currentLevel = currentLevel;
                         int dx = (int)(Math.random()*5+5);

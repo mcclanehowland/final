@@ -29,10 +29,10 @@ public class MainCharacter extends Character {
             g.drawImage(obscure,super.x-900,super.y-800,null);
         }
         //inventory box
-        g.setColor(Color.white);
+        g.setColor(Color.gray);
         g.fillRect(0,550,800,50);
         g.setColor(Color.red);
-        g.drawRoundRect(0,550,800,50,50,50);
+        g.drawRect(0,550,799,49);
         int x = 50;
         int y = 555;
         for(Item each : inventory) {

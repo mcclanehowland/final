@@ -1,6 +1,10 @@
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Level {
     /* 
@@ -13,16 +17,24 @@ public class Level {
     */
 
     /* constants */
-    final int obstacleNum = 400;
+    final int obstacleNum = 1000;
 
     //global variables
     static int level;
+    int arrowX,arrowY;
     private MainCharacter main;
+    private BufferedImage image;
     ArrayList<Obstacle> obstacles;
     ArrayList<Item> items;
     ArrayList<Character> characters;
     int[][] path;
     public Level(MainCharacter c) {
+        try {
+            image = ImageIO.read(new File("arrow.png"));
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         level++;
         main = c;
         obstacles = new ArrayList<Obstacle>();
@@ -49,6 +61,10 @@ public class Level {
                 path[i][0] = path[i][0]%800;
                 path[i][1] = (int)(Math.random()*500);
             }
+            if(path[i][0] == 750) {
+                arrowX = 690;
+                arrowY = path[i][1];
+            }
             // add the flashlight around x = 500
             if(level == 1 && !added && path[i][0] > 500) { 
                 items.add(new Flashlight(path[i][0],path[i][1]));
@@ -71,7 +87,7 @@ public class Level {
             int tempY = (int)(Math.random()*600);
             for(int j = 0;j < path.length;j++) {
                 // is the obstacle where the path is?
-                if(tempX+50 > path[j][0] && tempX < path[j][0]+50 && tempY+50 > path[j][1] && tempY < path[j][1]+60) {
+                if(tempX+60 > path[j][0] && tempX < path[j][0]+60 && tempY+60 > path[j][1] && tempY < path[j][1]+60) {
                     toAdd = false;
                     break;
                 }
@@ -114,6 +130,7 @@ public class Level {
         for(Obstacle each : obstacles) {
             each.draw(g);
         }
+        g.drawImage(image,arrowX,arrowY,null);
         //draw the path outline for testing
         /*g.setColor(Color.blue);
         for(int i = 0;i < path.length;i++) {
