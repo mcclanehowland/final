@@ -21,9 +21,9 @@ public class Level {
 
     //global variables
     static int level;
-    int arrowX,arrowY;
     private MainCharacter main;
     private BufferedImage image;
+    ArrayList<int[]> arrows;
     ArrayList<Obstacle> obstacles;
     ArrayList<Item> items;
     ArrayList<Character> characters;
@@ -37,6 +37,7 @@ public class Level {
         }
         level++;
         main = c;
+        arrows = new ArrayList<int[]>();
         obstacles = new ArrayList<Obstacle>();
         items = new ArrayList<Item>();
         path = new int[100][2];
@@ -62,8 +63,7 @@ public class Level {
                 path[i][1] = (int)(Math.random()*500);
             }
             if(path[i][0] == 750) {
-                arrowX = 690;
-                arrowY = path[i][1];
+                arrows.add(new int[] {760,path[i][1]});
             }
             // add the flashlight around x = 500
             if(level == 1 && !added && path[i][0] > 500) { 
@@ -130,7 +130,9 @@ public class Level {
         for(Obstacle each : obstacles) {
             each.draw(g);
         }
-        g.drawImage(image,arrowX,arrowY,null);
+        for(int[] each : arrows) {
+            g.drawImage(image,each[0],each[1],null);
+        }
         //draw the path outline for testing
         /*g.setColor(Color.blue);
         for(int i = 0;i < path.length;i++) {

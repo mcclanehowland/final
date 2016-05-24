@@ -69,7 +69,7 @@ public class Character {
     }
     public void talk(Graphics g) {
         g.setColor(Color.white);
-        g.fill3DRect(x+size/2,y-60,200,50,true);
+        g.fillRoundRect(x+size/2,y-60,200,50,20,20);
         g.setColor(Color.red);
         g.drawRoundRect(x+size/2,y-60,200,50,20,20);
         g.setColor(Color.black);
