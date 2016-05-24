@@ -37,10 +37,9 @@ public class MainCharacter extends Character {
     }
  public void playSound()
     {
-          
          try
          {
-            URL url = this.getClass().getClassLoader().getResource("thunk.wav");
+            URL url = this.getClass().getClassLoader().getResource("Sword Swing-SoundBible.com-639083727.wav");
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(url));
             clip.start();
