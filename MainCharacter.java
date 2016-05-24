@@ -7,8 +7,12 @@ import javax.imageio.ImageIO;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.net.URL;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class MainCharacter extends Character {
+    URL swordSound;
     private BufferedImage obscure;
     ArrayList<Item> inventory;
     boolean flashlight;
@@ -21,7 +25,30 @@ public class MainCharacter extends Character {
         catch (IOException e) {
             e.printStackTrace();
         }
+        try
+        {
+           swordSound = this.getClass().getClassLoader().getResource("rage_of_blades-Blaga_Saun-1763516257.wav");
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
         inventory = new ArrayList<Item>();
+    }
+ public void playSound()
+    {
+          
+         try
+         {
+            URL url = this.getClass().getClassLoader().getResource("thunk.wav");
+            Clip clip = AudioSystem.getClip();
+            clip.open(AudioSystem.getAudioInputStream(url));
+            clip.start();
+         }
+         catch (Exception exc)
+         {
+             exc.printStackTrace(System.out);
+         }
     }
     public void draw(Graphics g) {
         super.draw(g);

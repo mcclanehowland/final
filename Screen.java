@@ -82,6 +82,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                 each.talking = true;
                 if(main.attacking && main.sword) {
                     main.attack(each);
+                    main.playSound();
                 }
             }
             else {
@@ -148,6 +149,24 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                     characters.add(new Monster(currentLevel.path[r][0],currentLevel.path[r][1],"I'm a monster, kill me","monster"));
                     r += 10;
                     if(monsterNum > level*3) {
+                        break;
+                    }
+                }
+            }
+        }
+        if(level == 4) {
+            characters.add(new Miner(0,200,"A hoard of monsters is trying to stop you from getting away! Kill them all to escape.")); 
+            if(!main.sword) {
+                main.inventory.add(new Sword(0,0));
+                main.sword = true;
+            }
+            int monsterNum = 0;
+            for(int r = 0;r < currentLevel.path.length;r++) {
+                if(currentLevel.path[r][0] >= 250) {
+                    monsterNum++;
+                    characters.add(new Monster(currentLevel.path[r][0],currentLevel.path[r][1],"I'm a monster, kill me","monster"));
+                    r += 10;
+                    if(monsterNum > 16) {
                         break;
                     }
                 }

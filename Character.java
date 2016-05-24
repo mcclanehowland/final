@@ -8,6 +8,9 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.net.URL;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class Character {
     int x,y,size;
@@ -69,12 +72,12 @@ public class Character {
     }
     public void talk(Graphics g) {
         g.setColor(Color.white);
-        g.fillRoundRect(x+size/2,y-60,200,50,20,20);
+        g.fillRoundRect(x+size/2,y-90,200,70,20,20);
         g.setColor(Color.red);
-        g.drawRoundRect(x+size/2,y-60,200,50,20,20);
+        g.drawRoundRect(x+size/2,y-90,200,70,20,20);
         g.setColor(Color.black);
         Font z = new Font("ZapfDingbats", Font.PLAIN,18);            
-        drawText(text,z,g,300,x+size/2+10,y-40);
+        drawText(text,z,g,300,x+size/2+10,y-80);
     }
     public void move(int dX,int dY) {
         //check the collisions 
