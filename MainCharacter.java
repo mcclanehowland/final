@@ -35,19 +35,18 @@ public class MainCharacter extends Character {
         }
         inventory = new ArrayList<Item>();
     }
- public void playSound()
-    {
-         try
-         {
-            URL url = this.getClass().getClassLoader().getResource("Sword Swing-SoundBible.com-639083727.wav");
+    public void playSound(String filename) {
+        try
+        {
+            URL url = this.getClass().getClassLoader().getResource(filename);
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(url));
             clip.start();
-         }
-         catch (Exception exc)
-         {
-             exc.printStackTrace(System.out);
-         }
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+        }
     }
     public void draw(Graphics g) {
         super.draw(g);
@@ -79,6 +78,7 @@ public class MainCharacter extends Character {
         if(item.getType().equals("flashlight")) {
             flashlight = true;
         }
+
     }
 }
 

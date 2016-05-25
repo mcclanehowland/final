@@ -56,6 +56,7 @@ public class Character {
     public void drawText(String text, Font font, Graphics g, int width, int startX, int startY)
     {
         String[] words = text.split(" ");//String method that splits a String phrase into words, since " " is passed in
+        g.setFont(font);
         int i = 0;//Count integer
         while (i < words.length)
         {
@@ -76,8 +77,8 @@ public class Character {
         g.setColor(Color.red);
         g.drawRoundRect(x+size/2,y-90,200,70,20,20);
         g.setColor(Color.black);
-        Font z = new Font("ZapfDingbats", Font.PLAIN,18);            
-        drawText(text,z,g,300,x+size/2+10,y-80);
+        Font z = new Font("ZapfDingbats", Font.PLAIN,14);            
+        drawText(text,z,g,190,x+size/2+10,y-80);
     }
     public void move(int dX,int dY) {
         //check the collisions 

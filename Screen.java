@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import java.util.ArrayList;
@@ -14,9 +15,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.*;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import sun.audio.*;
+
 
 
 public class Screen extends JPanel implements MouseListener, KeyListener {
@@ -27,12 +30,15 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
     private boolean mainMenu = true;
     private MainCharacter main;
     private int level = 1;
+    private int counter = 0;
     private boolean levelOver = false;
     ArrayList<Character> characters;
     Level currentLevel;
+    Font f;
 
 	public Screen() {
         //key and mouse listener things 
+        music();
         try {
             background = ImageIO.read(new File("background.png"));
         } 
@@ -47,18 +53,24 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
         currentLevel = new Level(main);
         main.currentLevel = currentLevel;
         characters = new ArrayList<Character>();
-        characters.add(new Miner(0,100,"Search the cave to find the flashlight"));
+        characters.add(new Miner(0,200,"Search the cave to find the flashlight"));
         currentLevel.characters = characters;
+
+        f = new Font("ZapfDingbats", Font.PLAIN,16);
 	}
     public Dimension getPreferredSize() {
         return new Dimension(800,600);
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        counter++;
 		
 		if(bufferedImage==null) 
             bufferedImage = (BufferedImage)(createImage(getWidth(),getHeight())); 
 		Graphics gBuff = bufferedImage.createGraphics(); 
+
+        gBuff.setFont(f);
         
         //draw the background image
         gBuff.drawImage(background,0,0,null);
@@ -82,7 +94,9 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                 each.talking = true;
                 if(main.attacking && main.sword) {
                     main.attack(each);
-                    main.playSound();
+                    if(counter%2 == 0) {
+                        main.playSound("hitmarker.wav");
+                    }
                 }
             }
             else {
@@ -96,6 +110,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
             gBuff.fillRect(0,0,800,600);
             gBuff.setColor(Color.black);
             gBuff.drawString("Cave Explorer",350,300);
+            gBuff.drawString("Use the arrow keys to move",350,325);
             gBuff.drawString("Press Space to Begin",350,350);
         }
         if(main.x > 800) { //if the player reached the end of the screen, level up
@@ -105,8 +120,29 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
             gBuff.setColor(Color.gray);
             gBuff.fillRect(0,0,800,600);
             gBuff.setColor(Color.black);
-            gBuff.drawString("Cave Explorer: Level "+level,350,300);
-            gBuff.drawString("Press Space to Continue",350,350);
+            if(level <= 4) {
+                gBuff.drawString("Cave Explorer: Level "+level,350,300);
+                gBuff.drawString("Press Space to Continue",350,440);
+            }
+            if(level == 1) {
+                gBuff.drawString("You are stuck in a dark cave. Talk to the miner for help...",300,350);
+            }
+            if(level == 2) {
+                gBuff.drawString("Now that you have a flashlight,",300,350);
+                gBuff.drawString("you see a monster up ahead...",300,375);
+            }
+            if(level == 3) {
+                gBuff.drawString("Oh no! More monsters! Also, you must collect the scroll",300,350);
+            }
+            if(level == 4) {
+                gBuff.drawString("Now that you have the scroll, you",300,350);
+                gBuff.drawString("must fight your way out of the cave",300,375);
+            }
+            if(level == 5) {
+                gBuff.drawString("You found the scroll and fought your way out of the cave,",200,200);
+                gBuff.drawString("barely escaping with your life",200,235);
+                gBuff.drawString("You Win!",200,275);
+            }
         }
         if(!mainMenu) {
             gBuff.setColor(Color.red);
@@ -117,6 +153,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
     public void levelUp() {
         //update the current level
         level++;
+        main.playSound("chime_up.wav");
         levelOver = true;
         currentLevel = new Level(main);
         //get rid of all the other characters and add new characters
@@ -230,7 +267,7 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                 if(mainMenu) {
                     levelOver = true;
                 }
-                else if(levelOver) {
+                else if(levelOver && level <= 4) {
                     levelOver = false;
                 }
                 else {
@@ -277,6 +314,21 @@ public class Screen extends JPanel implements MouseListener, KeyListener {
                 moveLeft = false;
                 break;
         }       
+    }
+    public void music() {
+        AudioStream backgroundMusic;
+        AudioData musicData;
+        AudioPlayer musicPlayer = AudioPlayer.player;
+        ContinuousAudioDataStream loop = null;
+        try {
+            backgroundMusic = new AudioStream(new FileInputStream("POL-jungle-hideout-short.wav"));
+            musicData = backgroundMusic.getData();
+            loop = new ContinuousAudioDataStream(musicData);
+            musicPlayer.start(loop);
+        } 
+        catch (IOException error) { 
+            System.out.println(error);
+        }
     }
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e){}
