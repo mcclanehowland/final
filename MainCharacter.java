@@ -25,14 +25,6 @@ public class MainCharacter extends Character {
         catch (IOException e) {
             e.printStackTrace();
         }
-        try
-        {
-           swordSound = this.getClass().getClassLoader().getResource("rage_of_blades-Blaga_Saun-1763516257.wav");
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace(System.out);
-        }
         inventory = new ArrayList<Item>();
     }
     public void playSound(String filename) {
@@ -45,7 +37,7 @@ public class MainCharacter extends Character {
         }
         catch (Exception exc)
         {
-            exc.printStackTrace(System.out);
+            //exc.printStackTrace(System.out);
         }
     }
     public void draw(Graphics g) {

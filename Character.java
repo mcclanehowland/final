@@ -32,7 +32,7 @@ public class Character {
             image = ImageIO.read(new File(imageName));
         } 
         catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     public String getType() {
@@ -77,8 +77,8 @@ public class Character {
         g.setColor(Color.red);
         g.drawRoundRect(x+size/2,y-90,200,70,20,20);
         g.setColor(Color.black);
-        Font z = new Font("ZapfDingbats", Font.PLAIN,14);            
-        drawText(text,z,g,190,x+size/2+10,y-80);
+        Font z = new Font("ZapfDingbats", Font.PLAIN,16);            
+        drawText(text,z,g,190,x+size/2+10,y-75);
     }
     public void move(int dX,int dY) {
         //check the collisions 
